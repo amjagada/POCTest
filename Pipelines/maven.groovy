@@ -7,8 +7,8 @@
 // env.PRODUCTION_RUN = PRODUCTION_RUN
 // env.PASS_PARAMETER = PASS_PARAMETER
 env.Job_Paramert = Job_Paramert
-def staticConfig   = readYaml file: 'config/static.yaml'
-def projectName = staticConfig['Project_name']
+// def staticConfig   = readYaml file: 'config/static.yaml'
+// def projectName = staticConfig['Project_name']
 // if (env.BUILD_SYSTEM_BRANCH == "master") {
 //     currentBuild.setDisplayName("${env.BUILD_NUMBER}-${env.REGION}")
 // }
@@ -74,10 +74,27 @@ pipeline{
     // 1. SCM
     // 2. Build
     stages{
+        stage('Checkout for config'){
+            steps{
+            // checkout([$class: 'GitSCM',branches: scm.branches,extensions: scm.extensions + [[$class: 'CleanCheckout']],userRemoteConfigs: scm.userRemoteConfigs])
+            // checkout([$class: 'GitSCM',branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanCheckout']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'git-credentials', url: 'https://github.com/user/repo.git']]])
+            checkout(
+                [$class: 'GitSCM',branches: [[name: '*/master']],
+                doGenerateSubmoduleConfigurations: false, 
+                extensions: [[$class: 'CleanCheckout']], 
+                submoduleCfg: [], 
+                userRemoteConfigs: 
+                [[credentialsId: '6659ddc7-0e5c-4509-a3bb-bf5b8f54b77a', url: 'git@github.com:amjagada/POCTest.git']]])
+            }
+        }
+
+
         stage('Print all Parameters'){
             steps{
+                def staticConfig   = readYaml file: 'config/static.yaml'
+                print staticConfig.Project_name
                 println "$env.Job_Paramert"
-                println projectName
+                // println projectName
             }
 
         }
