@@ -5,10 +5,6 @@ jobName="First Maven Project"
 pipelineJob(jobName)
 {
   description('Compiles Maven Project')
-  concurrentBuild(true);
-  throttleConcurrentBuilds {
-    maxPerNode(1)
-  }
   logRotator {
     daysToKeep(7)
   }
@@ -19,4 +15,5 @@ pipelineJob(jobName)
       script(readFileFromWorkspace('Pipelines/maven.groovy'))
     }
   }
+}
 }
